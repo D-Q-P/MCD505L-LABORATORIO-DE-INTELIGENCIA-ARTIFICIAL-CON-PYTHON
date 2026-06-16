@@ -347,9 +347,8 @@ class SesionLog:
         try:
             self._archivo = open(ruta, "a", encoding="utf-8")
             ts: str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            self._archivo.write(f"\n{'═' * 60}\n")
             self._archivo.write(f"  SESIÓN INICIADA: {ts}\n")
-            self._archivo.write(f"{'═' * 60}\n")
+            self._archivo.write(f"{'-' * 60}\n")
             self._archivo.flush()
         except OSError as e:
             print(f"  No se pudo abrir '{ruta}': {e}")
@@ -384,7 +383,6 @@ class SesionLog:
         try:
             if self._archivo and not self._archivo.closed:
                 ts: str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                self._archivo.write(f"\n{'─' * 60}\n")
                 self._archivo.write(f"  SESIÓN CERRADA: {ts}\n")
                 self._archivo.write(f"{'─' * 60}\n")
         finally:

@@ -4,8 +4,8 @@ def calcular_precio_final(
     impuestos: float = 0.18, 
     moneda: str = "DOP", 
 ) -> tuple[float, str]: 
-
-    """Calcula el precio final aplicando descuentos sucesivos e impuestos. 
+    """
+    Calcula el precio final aplicando descuentos sucesivos e impuestos. 
     Los descuentos se encadenan: cada uno se aplica sobre el precio ya 
     descontado por el anterior, no sobre el precio base. El impuesto se 
     aplica una unica vez al final. 
@@ -17,10 +17,8 @@ def calcular_precio_final(
         moneda: Codigo de moneda del precio resultante. Por defecto "DOP". 
     Returns: 
         Tupla (precio_final, moneda) con el precio redondeado a dos decimales. 
-
     """ 
     precio = precio_base 
-
     for descuento in descuentos: 
         precio *= (1 - descuento) 
     precio *= (1 + impuestos) 
@@ -42,7 +40,6 @@ _FILTROS_SOPORTADOS: dict[str, callable] = {
 } 
 
 def generar_reporte(productos: list, **filtros) -> list: 
-
     """ 
     Filtra una lista de productos segun los criterios indicados e imprime el resultado. 
     Aplica todos los filtros reconocidos de forma conjunta (AND logico): un 
