@@ -102,17 +102,17 @@ class Matriz:
 
     @property
     def filas(self) -> int:
-        """Número de filas de la matriz (solo lectura)."""
+        """Número de filas de la matriz."""
         return self._filas
 
     @property
     def columnas(self) -> int:
-        """Número de columnas de la matriz (solo lectura)."""
+        """Número de columnas de la matriz."""
         return self._columnas
 
     @property
     def datos(self) -> np.ndarray:
-        """Copia del array NumPy interno (solo lectura)."""
+        """Copia del array NumPy interno."""
         return self._datos.copy()
 
     @property
@@ -418,9 +418,9 @@ def pedir_entero(
                 raise ValueError(f"Debe estar entre {minimo} y {maximo}.")
             return valor
         except ValueError as e:
-            print(f"    Entrada inválida: {e}  →  Intenta de nuevo.")
+            print(f"    Entrada inválida: {e}   Intenta de nuevo.")
         except TypeError as e:
-            print(f"    Error de tipo: {e}  →  Intenta de nuevo.")
+            print(f"    Error de tipo: {e}   Intenta de nuevo.")
 
 
 def pedir_float(mensaje: str) -> float:
@@ -441,7 +441,7 @@ def pedir_float(mensaje: str) -> float:
         except ValueError:
             print("    Valor inválido. Ingresa un número (ej: 3, -2.5, 0.7).")
         except TypeError as e:
-            print(f"    Error de tipo: {e}  →  Intenta de nuevo.")
+            print(f"    Error de tipo: {e}   Intenta de nuevo.")
 
 
 def pedir_dimensiones(etiqueta: str) -> tuple[int, int]:
@@ -541,7 +541,7 @@ def visualizar_matrices(
 
     plt.tight_layout()
     plt.savefig(ruta, dpi=150, bbox_inches="tight")
-    print(f"  Figura guardada → '{ruta}'.")
+    print(f"  Figura guardada '{ruta}'.")
     try:
         plt.show()
     except Exception:
@@ -609,7 +609,7 @@ def visualizar_resultado(
 
     plt.tight_layout()
     plt.savefig(ruta, dpi=150, bbox_inches="tight")
-    print(f"  Figura guardada → '{ruta}'.")
+    print(f"  Figura guardada '{ruta}'.")
     try:
         plt.show()
     except Exception:
@@ -641,7 +641,7 @@ def exportar_csv(matriz: Matriz) -> None:
 
     # Encabezados de columnas
     print(f"    Encabezados (separados por coma, {matriz.columnas} valores, Enter=auto):")
-    enc_raw: str = input("    → ").strip()
+    enc_raw: str = input("    ").strip()
     encabezados: Optional[list[str]] = None
 
     if enc_raw:
@@ -655,7 +655,7 @@ def exportar_csv(matriz: Matriz) -> None:
     try:
         df: pd.DataFrame = matriz.to_dataframe(encabezados)
         df.to_csv(nombre_archivo, index=True)
-        print(f"  Exportado exitosamente → '{nombre_archivo}'.")
+        print(f"  Exportado exitosamente '{nombre_archivo}'.")
         print(f"\n  Vista previa:\n{df.to_string()}")
     except (OSError, ValueError) as e:
         print(f"  Error al exportar: {e}")
@@ -675,7 +675,7 @@ MENU: dict[str, str] = {
     "11": "Inversa             A⁻¹",
     "12": "Inversa             B⁻¹",
     "13": "Rango               rank(A) y rank(B)",
-    "14": "Visualizar A y B    → subplots PNG",
+    "14": "Visualizar A y B    subplots PNG",
     "15": "Visualizar resultado de última operación",
     "16": "Exportar a CSV      (A, B o resultado)",
     "17": "Mostrar matrices actuales",
@@ -701,7 +701,7 @@ def mostrar_menu() -> str:
 
     while True:
         try:
-            opcion: str = input("  → Opción: ").strip()
+            opcion: str = input("  Opción: ").strip()
             if opcion not in MENU:
                 raise ValueError(f"'{opcion}' no es una opción válida.")
             return opcion
@@ -881,7 +881,7 @@ def main() -> None:
                     print("  [2] Matriz B")
                     if ultimo_resultado is not None:
                         print(f"  [3] Último resultado ({ultimo_resultado.nombre})")
-                    sub: str = input("  → Opción: ").strip()
+                    sub: str = input("  Opción: ").strip()
                     if sub == "1":
                         exportar_csv(mat_a)
                         log.registrar("CSV exportado: Matriz A")
