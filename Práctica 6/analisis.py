@@ -181,7 +181,7 @@ def imprimir_reporte(df: pd.DataFrame) -> None:
         stars  = "★" * row["rating"] + "☆" * (5 - row["rating"])
         titulo = (row["titulo"][:43] + "…") if len(row["titulo"]) > 45 else row["titulo"]
         print(f"  {i+1:>2}. £{row['precio']:>5.2f}  {stars}  {titulo}")
-        print(f"       ↳ Categoría: {row['categoria']}")
+        print(f"       Categoría: {row['categoria']}")
 
     #  Párrafo de análisis 
     mejor_cat   = prom.idxmax()

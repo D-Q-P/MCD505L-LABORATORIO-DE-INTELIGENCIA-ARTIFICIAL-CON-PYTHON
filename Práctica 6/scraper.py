@@ -1,6 +1,5 @@
 """
-scraper.py — Descarga páginas de books.toscrape.com con paginación y reintentos.
-MCD505L · Taller Integrador · Unidad 6
+scraper.py — Descarga páginas de books.toscrape.com.
 """
 import time
 import requests
@@ -24,7 +23,7 @@ def fetch(url: str, retries: int = 3, backoff: float = 2.0) -> Optional[str]:
             return resp.text
         except requests.RequestException as exc:
             espera = backoff ** attempt
-            print(f"    ⚠ intento {attempt+1}/{retries} falló ({exc}). Reintentando en {espera:.0f}s…")
+            print(f"    intento {attempt+1}/{retries} falló ({exc}). Reintentando en {espera:.0f}s…")
             time.sleep(espera)
     print(f"    ✗ No se pudo obtener: {url}")
     return None

@@ -1,6 +1,5 @@
 """
 limpieza.py — Convierte precios y ratings a tipos numéricos con expresiones regulares.
-MCD505L · Taller Integrador · Unidad 6
 """
 import re
 import pandas as pd
