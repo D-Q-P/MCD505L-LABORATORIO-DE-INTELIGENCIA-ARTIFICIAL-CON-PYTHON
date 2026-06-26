@@ -1,11 +1,9 @@
 ```
-proyecto_libros/
-├── books_catalog/          # Paquete principal
-│   ├── __init__.py         # Exportaciones del paquete
-│   ├── scraper.py          # Descarga páginas con paginación
-│   ├── parser.py           # Extrae datos con BeautifulSoup
-│   ├── limpieza.py         # Limpia precios y ratings con regex
-│   └── analisis.py         # Análisis pandas + gráfica matplotlib
+Practica 6/
+├── scraper.py              # Descarga páginas con paginación
+├── parser.py               # Extrae datos con BeautifulSoup
+├── limpieza.py             # Limpia precios y ratings con regex
+├── analisis.py             # Análisis pandas + gráfica matplotlib
 ├── main.py                 # Script orquestador del pipeline
 ├── requirements.txt        # Dependencias
 └── README.md               # Este archivo
@@ -27,7 +25,7 @@ pip install -r requirements.txt
 python main.py
 ```
 
-El pipeline tarda aproximadamente **2–3 minutos** (respeta el servidor con pausas entre requests).
+El pipeline tarda aproximadamente 2–3 minutos (debido a las pausas entre requests).
 
 ### Archivos generados
 
