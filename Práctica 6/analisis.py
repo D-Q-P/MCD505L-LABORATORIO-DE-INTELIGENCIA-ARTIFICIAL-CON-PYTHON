@@ -1,7 +1,5 @@
 """
 analisis.py — Responde las preguntas del taller con pandas; genera gráfica doble.
-MCD505L · Taller Integrador · Unidad 6
-
 Preguntas:
   1. ¿Cuál es el precio promedio por categoría?
   2. ¿Cuántos libros hay por nivel de rating (1 a 5 estrellas)?
