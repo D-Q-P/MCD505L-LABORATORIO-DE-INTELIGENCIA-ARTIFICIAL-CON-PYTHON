@@ -68,23 +68,26 @@ def top_10_mas_caros(df: pd.DataFrame) -> pd.DataFrame:
 # Generador de gráfica
 def generar_grafica(df: pd.DataFrame, output_path: str = "grafica_analisis.png") -> None:
     """
-    Genera y guarda una figura con 3 subgráficas:
-      - (izquierda) Precio promedio por rating (barras)
-      - (centro)    Distribución de libros por rating (pastel)
-      - (derecha)   Top 10 categorías más caras (barras horizontales)
+    Genera y guarda una figura 2×2 con las 4 subgráficas:
+      - (1) Precio promedio por rating (barras verticales)
+      - (2) Distribución de libros por rating (pastel)
+      - (3) Top 10 categorías más caras (barras horizontales)
+      - (4) Top 10 libros más caros (barras horizontales)   ← nuevo
     """
-    resumen_rating  = df.groupby("rating")["precio"].mean().round(1)
-    conteo_rating   = libros_por_rating(df)
-    top_categorias  = precio_promedio_por_categoria(df).head(10)
-
-    colores_barras  = [_COLORES_RATING[r] for r in resumen_rating.index]
-    colores_pastel  = [_COLORES_RATING[r] for r in conteo_rating.index]
-
-    fig, axes = plt.subplots(1, 3, figsize=(18, 6))
+    resumen_rating = df.groupby("rating")["precio"].mean().round(1)
+    conteo_rating  = libros_por_rating(df)
+    top_categorias = precio_promedio_por_categoria(df).head(10)
+    top_libros     = top_10_mas_caros(df)
+ 
+    colores_barras = [_COLORES_RATING[r] for r in resumen_rating.index]
+    colores_pastel = [_COLORES_RATING[r] for r in conteo_rating.index]
+ 
+    fig, axes = plt.subplots(2, 2, figsize=(18, 12))
     fig.patch.set_facecolor("#f7f7f7")
-
-    # Subgráfica 1: precio promedio por rating 
-    bars = axes[0].bar(
+ 
+    # ── Subgráfica 1 (arriba-izq): precio promedio por rating ─────────────
+    ax1 = axes[0, 0]
+    bars = ax1.bar(
         [ESTRELLAS[r] for r in resumen_rating.index],
         resumen_rating.values,
         color=colores_barras,
@@ -92,20 +95,22 @@ def generar_grafica(df: pd.DataFrame, output_path: str = "grafica_analisis.png")
         linewidth=0.8,
         zorder=3,
     )
-    axes[0].bar_label(bars, labels=[f"£{v}" for v in resumen_rating.values],
-                      padding=4, fontsize=10, fontweight="bold")
-    axes[0].set_title("Precio promedio por rating", fontsize=12, fontweight="bold", pad=12)
-    axes[0].set_xlabel("Nivel de rating", fontsize=10)
-    axes[0].set_ylabel("Precio promedio (£)", fontsize=10)
-    axes[0].set_ylim(0, resumen_rating.max() * 1.22)
-    axes[0].yaxis.set_major_formatter(mticker.FormatStrFormatter("£%.0f"))
-    axes[0].set_facecolor("#f0f0f0")
-    axes[0].grid(axis="y", linestyle="--", alpha=0.5, zorder=0)
-    axes[0].tick_params(axis="x", labelsize=9)
-
-    # Subgráfica 2: distribución por rating (pastel)
-    etiquetas = [f"{ESTRELLAS[r]}\n{v} libros" for r, v in zip(conteo_rating.index, conteo_rating.values)]
-    wedges, texts, autotexts = axes[1].pie(
+    ax1.bar_label(bars, labels=[f"£{v}" for v in resumen_rating.values],
+                  padding=4, fontsize=10, fontweight="bold")
+    ax1.set_title("Precio promedio por rating", fontsize=13, fontweight="bold", pad=12)
+    ax1.set_xlabel("Nivel de rating", fontsize=10)
+    ax1.set_ylabel("Precio promedio (£)", fontsize=10)
+    ax1.set_ylim(0, resumen_rating.max() * 1.22)
+    ax1.yaxis.set_major_formatter(mticker.FormatStrFormatter("£%.0f"))
+    ax1.set_facecolor("#f0f0f0")
+    ax1.grid(axis="y", linestyle="--", alpha=0.5, zorder=0)
+    ax1.tick_params(axis="x", labelsize=9)
+ 
+    # ── Subgráfica 2 (arriba-der): distribución por rating (pastel) ───────
+    ax2 = axes[0, 1]
+    etiquetas = [f"{ESTRELLAS[r]}\n{v} libros"
+                 for r, v in zip(conteo_rating.index, conteo_rating.values)]
+    wedges, texts, autotexts = ax2.pie(
         conteo_rating.values,
         labels=etiquetas,
         colors=colores_pastel,
@@ -116,40 +121,73 @@ def generar_grafica(df: pd.DataFrame, output_path: str = "grafica_analisis.png")
     for at in autotexts:
         at.set_fontsize(9)
         at.set_fontweight("bold")
-    axes[1].set_title("Distribución de libros por rating", fontsize=12, fontweight="bold", pad=12)
-
-    #  Subgráfica 3: top 10 categorías más caras
-    top_cat_inv = top_categorias.iloc[::-1]   # invertir para que el mayor quede arriba
-    colores_cat = plt.cm.RdYlGn_r([i / len(top_cat_inv) for i in range(len(top_cat_inv))])
-    hbars = axes[2].barh(
+    ax2.set_title("Distribución de libros por rating", fontsize=13, fontweight="bold", pad=12)
+ 
+    # ── Subgráfica 3 (abajo-izq): top 10 categorías más caras ────────────
+    ax3 = axes[1, 0]
+    top_cat_inv  = top_categorias.iloc[::-1]
+    colores_cat  = plt.cm.RdYlGn_r([i / len(top_cat_inv) for i in range(len(top_cat_inv))])
+    hbars3 = ax3.barh(
         top_cat_inv.index,
         top_cat_inv.values,
         color=colores_cat,
         edgecolor="white",
         linewidth=0.8,
     )
-    axes[2].bar_label(hbars, labels=[f"£{v:.2f}" for v in top_cat_inv.values],
-                      padding=4, fontsize=9)
-    axes[2].set_title("Top 10 categorías más caras\n(precio promedio)", fontsize=12, fontweight="bold", pad=12)
-    axes[2].set_xlabel("Precio promedio (£)", fontsize=10)
-    axes[2].set_facecolor("#f0f0f0")
-    axes[2].grid(axis="x", linestyle="--", alpha=0.5)
-    axes[2].tick_params(axis="y", labelsize=8)
-    axes[2].set_xlim(0, top_cat_inv.max() * 1.18)
-
+    ax3.bar_label(hbars3, labels=[f"£{v:.2f}" for v in top_cat_inv.values],
+                  padding=4, fontsize=9)
+    ax3.set_title("Top 10 categorías más caras\n(precio promedio)", fontsize=13, fontweight="bold", pad=12)
+    ax3.set_xlabel("Precio promedio (£)", fontsize=10)
+    ax3.set_facecolor("#f0f0f0")
+    ax3.grid(axis="x", linestyle="--", alpha=0.5)
+    ax3.tick_params(axis="y", labelsize=8)
+    ax3.set_xlim(0, top_cat_inv.max() * 1.18)
+ 
+    # ── Subgráfica 4 (abajo-der): top 10 libros más caros ─────────────────
+    ax4 = axes[1, 1]
+    # Truncar títulos largos para que quepan en el eje Y
+    titulos = [
+        (t[:40] + "…") if len(t) > 42 else t
+        for t in top_libros["titulo"].iloc[::-1]
+    ]
+    precios_top = top_libros["precio"].iloc[::-1].values
+    ratings_top = top_libros["rating"].iloc[::-1].values
+    colores_libros = [_COLORES_RATING[r] for r in ratings_top]
+ 
+    hbars4 = ax4.barh(
+        titulos,
+        precios_top,
+        color=colores_libros,
+        edgecolor="white",
+        linewidth=0.8,
+    )
+    ax4.bar_label(hbars4, labels=[f"£{v:.2f}" for v in precios_top],
+                  padding=4, fontsize=9, fontweight="bold")
+    ax4.set_title("Top 10 libros más caros", fontsize=13, fontweight="bold", pad=12)
+    ax4.set_xlabel("Precio (£)", fontsize=10)
+    ax4.set_facecolor("#f0f0f0")
+    ax4.grid(axis="x", linestyle="--", alpha=0.5)
+    ax4.tick_params(axis="y", labelsize=8)
+    ax4.set_xlim(0, precios_top.max() * 1.18)
+ 
+    # Leyenda de colores de rating para la subgráfica 4
+    from matplotlib.patches import Patch
+    leyenda = [Patch(color=_COLORES_RATING[r], label=f"{ESTRELLAS[r]}")
+               for r in sorted(_COLORES_RATING)]
+    ax4.legend(handles=leyenda, title="Rating", fontsize=8,
+               title_fontsize=8, loc="lower right")
+ 
     plt.tight_layout(pad=2.5)
     plt.savefig(output_path, dpi=150, bbox_inches="tight", facecolor=fig.get_facecolor())
     plt.close()
     print(f"  Gráfica guardada → {output_path}")
-
-
-# Imprimirbresultados formateados
+ 
 def imprimir_reporte(df: pd.DataFrame) -> None:
     """Imprime en consola el reporte completo de las 3 preguntas."""
-
+ 
     sep = "━" * 62
-
-    #  Q1 
+ 
+    # Q1 
     print(f"\n{sep}")
     print("  Q1 · Precio promedio por categoría")
     print(sep)
@@ -158,8 +196,8 @@ def imprimir_reporte(df: pd.DataFrame) -> None:
     print(f"  {'-'*38} {'-'*10}")
     for cat, precio in prom.items():
         print(f"  {cat:<38} £{precio:>8.2f}")
-
-    #  Q2 
+ 
+    # Q2 
     print(f"\n{sep}")
     print("  Q2 · Cantidad de libros por nivel de rating")
     print(sep)
@@ -170,7 +208,7 @@ def imprimir_reporte(df: pd.DataFrame) -> None:
         barra   = "█" * round(cantidad / max_cant * 35)
         pct     = cantidad / len(df) * 100
         print(f"  {ESTRELLAS[rating]}  {cantidad:>4} libros  ({pct:4.1f}%)  {barra}")
-
+ 
     # Q3 
     print(f"\n{sep}")
     print("  Q3 · Los 10 libros más caros del catálogo")
@@ -183,18 +221,3 @@ def imprimir_reporte(df: pd.DataFrame) -> None:
         print(f"  {i+1:>2}. £{row['precio']:>5.2f}  {stars}  {titulo}")
         print(f"       Categoría: {row['categoria']}")
 
-    #  Párrafo de análisis 
-    mejor_cat   = prom.idxmax()
-    peor_cat    = prom.idxmin()
-    rating_top  = por_rating.idxmax()
-    print(f"\n{sep}")
-    print("  Análisis breve")
-    print(sep)
-    print(f"""
-  El catálogo contiene {len(df):,} libros en {df['categoria'].nunique()} categorías.
-  La categoría con mayor precio promedio es "{mejor_cat}" (£{prom.max():.2f}),
-  mientras que "{peor_cat}" es la más accesible (£{prom.min():.2f}).
-  El nivel de rating más frecuente es {rating_top} {ESTRELLAS[rating_top]}
-  con {por_rating[rating_top]:,} libros ({por_rating[rating_top]/len(df)*100:.1f}% del catálogo),
-  y el libro más caro cuesta £{df['precio'].max():.2f}.
-""")

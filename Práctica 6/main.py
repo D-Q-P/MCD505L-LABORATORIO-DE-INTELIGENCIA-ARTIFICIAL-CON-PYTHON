@@ -22,10 +22,7 @@ GRAFICA_PATH = "grafica_analisis.png"
 def main() -> None:
     inicio_total = time.time()
 
-    print("=" * 62)
     print("   TALLER INTEGRADOR — Catálogo de books.toscrape.com")
-    print("   MCD505L · Laboratorio de IA con Python · Unidad 6")
-    print("=" * 62)
 
     # FASE 1: Obtener categorías
     print("\n[1/4] Descargando lista de categorías…")
