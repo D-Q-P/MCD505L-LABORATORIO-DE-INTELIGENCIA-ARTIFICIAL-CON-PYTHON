@@ -62,7 +62,6 @@ def top_10_mas_caros(df: pd.DataFrame) -> pd.DataFrame:
         .reset_index(drop=True)
     )
 
-
 # Generador de gráfica
 def generar_grafica(df: pd.DataFrame, output_path: str = "grafica_analisis.png") -> None:
     """
@@ -83,7 +82,7 @@ def generar_grafica(df: pd.DataFrame, output_path: str = "grafica_analisis.png")
     fig, axes = plt.subplots(2, 2, figsize=(18, 12))
     fig.patch.set_facecolor("#f7f7f7")
  
-    # ── Subgráfica 1 (arriba-izq): precio promedio por rating ─────────────
+    # Subgráfica 1 (arriba-izq): precio promedio por rating
     ax1 = axes[0, 0]
     bars = ax1.bar(
         [ESTRELLAS[r] for r in resumen_rating.index],
@@ -104,7 +103,7 @@ def generar_grafica(df: pd.DataFrame, output_path: str = "grafica_analisis.png")
     ax1.grid(axis="y", linestyle="--", alpha=0.5, zorder=0)
     ax1.tick_params(axis="x", labelsize=9)
  
-    # ── Subgráfica 2 (arriba-der): distribución por rating (pastel) ───────
+    # Subgráfica 2 (arriba-der): distribución por rating (pastel)
     ax2 = axes[0, 1]
     etiquetas = [f"{ESTRELLAS[r]}\n{v} libros"
                  for r, v in zip(conteo_rating.index, conteo_rating.values)]
@@ -121,7 +120,7 @@ def generar_grafica(df: pd.DataFrame, output_path: str = "grafica_analisis.png")
         at.set_fontweight("bold")
     ax2.set_title("Distribución de libros por rating", fontsize=13, fontweight="bold", pad=12)
  
-    # ── Subgráfica 3 (abajo-izq): top 10 categorías más caras ────────────
+    # Subgráfica 3 (abajo-izq): top 10 categorías más caras
     ax3 = axes[1, 0]
     top_cat_inv  = top_categorias.iloc[::-1]
     colores_cat  = plt.cm.RdYlGn_r([i / len(top_cat_inv) for i in range(len(top_cat_inv))])
@@ -141,7 +140,7 @@ def generar_grafica(df: pd.DataFrame, output_path: str = "grafica_analisis.png")
     ax3.tick_params(axis="y", labelsize=8)
     ax3.set_xlim(0, top_cat_inv.max() * 1.18)
  
-    # ── Subgráfica 4 (abajo-der): top 10 libros más caros ─────────────────
+    # Subgráfica 4 (abajo-der): top 10 libros más caros
     ax4 = axes[1, 1]
     # Truncar títulos largos para que quepan en el eje Y
     titulos = [

@@ -17,7 +17,6 @@ _PRECIO_RE = re.compile(r"[\d]+\.[\d]+|[\d]+")
 def precio_a_float(txt: str) -> float:
     """
     Convierte un texto de precio a float.
-    Ejemplos: 'Â£51.77' → 51.77 | '£12.34' → 12.34 | '9.99' → 9.99
     Devuelve float('nan') si no encuentra número.
     """
     match = _PRECIO_RE.search(txt)
@@ -27,7 +26,6 @@ def precio_a_float(txt: str) -> float:
 def rating_a_int(txt: str) -> int:
     """
     Convierte la clase CSS de rating a entero.
-    Ejemplos: 'Three' → 3 | 'Five' → 5
     Devuelve 0 si el valor no se reconoce.
     """
     return RATING_MAP.get(str(txt).strip().title(), 0)

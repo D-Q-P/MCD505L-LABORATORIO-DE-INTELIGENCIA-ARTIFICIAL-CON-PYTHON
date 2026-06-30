@@ -22,7 +22,7 @@ GRAFICA_PATH = "grafica_analisis.png"
 def main() -> None:
     inicio_total = time.time()
 
-    print("   TALLER INTEGRADOR — Catálogo de books.toscrape.com")
+    print("     Catálogo de books.toscrape.com")
 
     # FASE 1: Obtener categorías
     print("\n[1/4] Descargando lista de categorías…")
@@ -33,7 +33,7 @@ def main() -> None:
     print(f"  {len(categorias)} categorías encontradas.")
 
     # FASE 2: Scraping libro a libro por categoría 
-    print(f"\n[2/4] Scrapeando libros (esto toma ~2–3 min)…")
+    print(f"\n[2/4] Scrapeando libros, Esto puede tomar un momento")
     t_scraping = time.time()
     registros: list[dict] = []
 
@@ -49,7 +49,7 @@ def main() -> None:
     print(f"\n  Total extraído: {len(registros):,} registros en {duracion_scraping:.1f}s")
 
     # FASE 3: Limpieza
-    print("\n[3/4] Limpiando y estructurando datos…")
+    print("\n[3/4] Limpiando y estructurando datos")
     df_raw = pd.DataFrame(registros)
     df     = limpiar(df_raw)
 

@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 from typing import Generator, Optional
 
 BASE_URL  = "https://books.toscrape.com/"
-HEADERS   = {"User-Agent": "MCD505L-BooksScraper/1.0 (educational-project)"}
+HEADERS   = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:152.0) Gecko/20100101 Firefox/152.0"}
 DELAY_SEG = 0.1   
 
 
